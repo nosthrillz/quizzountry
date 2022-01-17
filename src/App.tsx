@@ -27,20 +27,28 @@ function App() {
   const [correctAnswers, setcorrectAnswers] = useState<number>(0);
   const [showResults, setShowResults] = useState<boolean>(false);
 
+
+  const fetchData = async () => {
+    const data = await getNamesAndFlags();
+    setQuestions(computeQuestions(data));
+  }
+
+
   useEffect(()=>{
-    const fetchData = async () => {
-      const data = await getNamesAndFlags();
-      setQuestions(computeQuestions(data));
-    }
     fetchData();
   }, [])
 
   useEffect(()=> {
     if (currentStep === 10) {
       setShowResults(true);
-      //setCurrentStep(0);
     }
   }, [currentStep])
+
+  const handleReplay = () => {
+    fetchData();
+    setCurrentStep(0);
+    setShowResults(false);
+  }
 
   return (
     <Wrapper>
@@ -68,14 +76,14 @@ function App() {
             <ResultsText>
               You got <strong>{correctAnswers}</strong> correct answers
             </ResultsText>
-            <ResultsButton>
+            <ResultsButton onClick={handleReplay}>
               Play again
             </ResultsButton>
           </ResultsReset>
         }
       </Main>
       <footer>
-        created by <a href="https://github.com/nosthrillz" target="_blank" rel="noreferrer">NoSThrillZ</a> - devChallenges.io
+        built with ❤️ by <a href="https://github.com/nosthrillz" target="_blank" rel="noreferrer">NoSThrillZ</a> - devChallenges.io
       </footer>
     </Wrapper>
   );
@@ -107,6 +115,8 @@ const Title = styled.h1`
   line-height: 54px;
   color: var(--white);
   z-index: 2;
+  background: radial-gradient(rgba(0,0,0,.1),rgba(0,0,0,.03),rgba(0,0,0,0));
+  width: fit-content;
 `;
 
 const CardWrapper = styled.div`

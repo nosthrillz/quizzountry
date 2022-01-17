@@ -11,7 +11,7 @@ export const computeQuestions = (data: [{name:string, flag: string, capital: str
     return {
         type: selectedOption,
         data: selectedQuestions.map((question) => {
-            const text = (selectedOption === 'capitals') ? `Which is the capital of ${question.name}` : 'Which country does this flag belong to?';
+            const text = (selectedOption === 'capitals') ? `Which is the capital of ${question.name}?` : 'Which country does this flag belong to?';
 
             let otherAnswers = [];
             if (selectedOption==="capitals") do {otherAnswers = select(data, 3, 'capital')} while (otherAnswers.includes(question.capitals))
