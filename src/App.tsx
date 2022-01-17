@@ -26,11 +26,14 @@ function App() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [correctAnswers, setcorrectAnswers] = useState<number>(0);
   const [showResults, setShowResults] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const NUMBER_OF_QUESTIONS = 1;
 
 
   const fetchData = async () => {
     const data = await getNamesAndFlags();
-    setQuestions(computeQuestions(data));
+    setQuestions(computeQuestions(data, NUMBER_OF_QUESTIONS));
   }
 
 
@@ -39,16 +42,23 @@ function App() {
   }, [])
 
   useEffect(()=> {
-    if (currentStep === 10) {
+    if (currentStep === NUMBER_OF_QUESTIONS) {
       setShowResults(true);
     }
   }, [currentStep])
 
   const handleReplay = () => {
+    setIsLoading(true);
+
     fetchData();
-    setCurrentStep(0);
     setShowResults(false);
+    setCurrentStep(0);
+    setcorrectAnswers(0);
+
+    setIsLoading(false);
   }
+
+  if (isLoading) return <h1>Loading...</h1>
 
   return (
     <Wrapper>
@@ -64,7 +74,8 @@ function App() {
                 key={idx}
                 show={currentStep === idx}
                 onNext={()=>setCurrentStep(step=>step+1)}
-                onCorrectAnswer={()=>{setcorrectAnswers(count=>count+1); console.log(correctAnswers)}}
+                onCorrectAnswer={()=>setcorrectAnswers(count=>count+1)}
+                currentStep={currentStep}
               />
             )}
           </CardWrapper>
@@ -73,18 +84,18 @@ function App() {
           <ResultsReset>
             <img src={Results} alt="results" />
             <ResultsTitle>Results</ResultsTitle>
-            <ResultsText>
-              You got <strong>{correctAnswers}</strong> correct answers
+            <ResultsText number={correctAnswers}>
+              You got <strong>{correctAnswers}</strong> correct answers!
             </ResultsText>
             <ResultsButton onClick={handleReplay}>
-              Play again
+              {correctAnswers < 5 ? 'Try again' : 'Play again'}
             </ResultsButton>
           </ResultsReset>
         }
       </Main>
-      <footer>
+      <Footer>
         built with ❤️ by <a href="https://github.com/nosthrillz" target="_blank" rel="noreferrer">NoSThrillZ</a> - devChallenges.io
-      </footer>
+      </Footer>
     </Wrapper>
   );
 }
@@ -94,9 +105,15 @@ export default App;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  padding-top: 20%;
+  padding-top: 15vh;
   height: inherit;
+
+  @media screen and (max-width: 500px) {
+   padding-top: 0;
+   height: revert;
+  }
 `;
 
 const Main = styled.main`
@@ -117,6 +134,10 @@ const Title = styled.h1`
   z-index: 2;
   background: radial-gradient(rgba(0,0,0,.1),rgba(0,0,0,.03),rgba(0,0,0,0));
   width: fit-content;
+
+  @media screen and (max-width: 500px) {
+    font-size: 24px;
+  }
 `;
 
 const CardWrapper = styled.div`
@@ -127,6 +148,12 @@ const CardWrapper = styled.div`
   position: relative;
   z-index: 1;
   min-height: fit-content;
+
+  @media screen and (max-width: 500px) {
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 24px;
+  }
 
   img {
     position: absolute;
@@ -152,17 +179,26 @@ const ResultsTitle = styled.h2`
   font-size: 48px;
   font-weight: 700;
   line-height: 72px;
+  @media screen and (max-width: 500px) {
+    font-size: 36px;
+  }
 `;
 
-const ResultsText = styled.p`
+const ResultsText = styled.p<{number: number}>`
   font-size: 18px;
   font-weight: 400;
   line-height: 54px;
+  @media screen and (max-width: 500px) {
+    font-size: 14px;
+  }
 
   strong {
     font-size: 36px;
     font-weight: 700;
-    color: var(--green);
+    color: ${props=>props.number < 5 ? 'var(--red)' : 'var(--green)'};
+    @media screen and (max-width: 500px) {
+      font-size: 24px;
+    }
   }
 `
 
@@ -174,11 +210,33 @@ const ResultsButton = styled.button`
   padding: 15px 36px;
   border-radius: 12px;
   border: 2px solid;
+  @media screen and (max-width: 500px) {
+    font-size: 14px;
+  }
 
   &:hover, &:focus {
       border-color: var(--orange);
       background: var(--orange);
       color: var(--white);
       cursor: pointer;
+  }
+`;
+
+const Footer = styled.footer`
+  color: var(--white);
+  font-family: 'Montserrat';
+  font-weight: 500;
+  font-size: 14px;
+  text-align: center;
+  padding: 24px;
+
+  @media screen and (max-width: 500px) {
+    padding: 12px;
+    font-size: 10px;
+  }
+
+  a {
+    color: inherit;
+    font-weight: 700;
   }
 `;

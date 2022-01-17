@@ -47,6 +47,9 @@ const AnswerButton = styled.button<{answerStatus: null | false | true}>`
     font-weight: 500;
     font-size: 18px;
     width: 100%;
+    @media screen and (max-width: 500px) {
+        font-size: 14px;
+    }
 
     span {
         position: absolute;

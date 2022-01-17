@@ -1,10 +1,10 @@
-export const computeQuestions = (data: [{name:string, flag: string, capital: string}]) => {
+export const computeQuestions = (data: [{name:string, flag: string, capital: string}], NUMBER_OF_QUESTIONS: number) => {
     const options = ['capitals','flags'];
     const selectedOption = pickRandom(options);
 
     let selectedQuestions = [];
     do {
-        selectedQuestions = select(data,10,'')
+        selectedQuestions = select(data,NUMBER_OF_QUESTIONS,'')
     } while
         (selectedQuestions.some((item)=>!item.flag) || hasDuplicates(selectedQuestions))
 
@@ -14,13 +14,13 @@ export const computeQuestions = (data: [{name:string, flag: string, capital: str
             const text = (selectedOption === 'capitals') ? `Which is the capital of ${question.name}?` : 'Which country does this flag belong to?';
 
             let otherAnswers = [];
-            if (selectedOption==="capitals") do {otherAnswers = select(data, 3, 'capital')} while (otherAnswers.includes(question.capitals))
+            if (selectedOption==="capitals") do {otherAnswers = select(data, 3, 'capital')} while (otherAnswers.includes(question.capitals) || hasDuplicates(otherAnswers))
             else do {otherAnswers = select(data, 3, 'name')} while (otherAnswers.includes(question.name) || hasDuplicates(otherAnswers))
 
             const output = {
                 text,
-                correctAnswer: question.capital,
-                allAnswers: shuffleArray([...otherAnswers, question.capital]),
+                correctAnswer: selectedOption==="capitals" ? question.capital : question.name,
+                allAnswers: shuffleArray([...otherAnswers, selectedOption==="capitals" ? question.capital : question.name]),
                 flag: question.flag
             }
             return output;

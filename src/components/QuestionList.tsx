@@ -16,9 +16,10 @@ interface QuestionListProps {
     onNext: () => void,
     show: boolean,
     onCorrectAnswer: () => void,
+    currentStep: number
 }
 
-export default function QuestionList({data, type, onNext, show, onCorrectAnswer}: QuestionListProps) {
+export default function QuestionList({data, type, onNext, show, onCorrectAnswer, currentStep}: QuestionListProps) {
     const [answerGiven, setAnswerGiven] = useState<null|string>(null);
 
     const handleClick= (id: number) => {
@@ -30,7 +31,7 @@ export default function QuestionList({data, type, onNext, show, onCorrectAnswer}
     else return (
         <Wrapper>
             {type==="flags" && <Flag>{data.flag}</Flag>}
-            <Question>{data.text}</Question>
+            <Question>{currentStep+1}. {data.text}</Question>
             <Answers>
             {data.allAnswers.map((answer:string, idx:number) =>(
                 <Answer
@@ -63,6 +64,9 @@ const Flag = styled.p`
         1px 1px rgba(0, 0, 0, 0.1),
         1px 2px rgba(0, 0, 0, 0.1),
         3px 4px rgba(0, 0, 0, 0.1);
+    @media screen and (max-width: 500px) {
+        font-size: 60px;
+    }
 `;
 
 
@@ -71,12 +75,22 @@ const Question = styled.h2`
     font-weight: 700;
     line-height: 36px;
     margin-bottom: 32px;
+
+    @media screen and (max-width: 500px) {
+        font-size: 18px;
+        margin-bottom: 24px;
+        line-height: 24px;
+    }
 `;
 
 const Answers = styled.div`
     display: flex;
     flex-direction: column;
     gap: 25px;
+    @media screen and (max-width: 500px) {
+        gap: 14px;
+    }
+
 `;
 
 const Next = styled.button`
@@ -90,6 +104,11 @@ const Next = styled.button`
     border-radius: 12px;
     color: var(--purple);
     border: 2px solid;
+    @media screen and (max-width: 500px) {
+        font-size: 14px;
+        padding: 15px 24px;
+        margin-top: 14px;
+    }
 
     &:hover, &:focus {
         border-color: var(--orange);
