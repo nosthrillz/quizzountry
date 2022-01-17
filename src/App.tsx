@@ -6,10 +6,6 @@ import { getNamesAndFlags } from './features/fetchData';
 import Adventure from './images/undraw_adventure_4hum 1.svg';
 import Results from './images/undraw_winners_ao2o 2.svg'
 
-interface incomingData {
-  name: string, flag: string, capital: string
-}
-
 export interface questions {
   text: string,
   correctAnswer: string,
@@ -28,7 +24,7 @@ function App() {
   const [showResults, setShowResults] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const NUMBER_OF_QUESTIONS = 1;
+  const NUMBER_OF_QUESTIONS = 10;
 
 
   const fetchData = async () => {
