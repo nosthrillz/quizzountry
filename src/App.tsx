@@ -6,19 +6,10 @@ import { getNamesAndFlags } from './features/fetchData';
 import Adventure from './images/undraw_adventure_4hum 1.svg';
 import Results from './images/undraw_winners_ao2o 2.svg'
 
-export interface questions {
-  text: string,
-  correctAnswer: string,
-  allAnswers: string[],
-  flag: string
-}
-interface questionData {
-  type:string,
-  data: questions[]
-}
+import {QuestionCollection} from './features/interfaces'
 
 function App() {
-  const [questions, setQuestions] = useState<questionData | null>(null);
+  const [questions, setQuestions] = useState<QuestionCollection | null>(null);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [correctAnswers, setcorrectAnswers] = useState<number>(0);
   const [showResults, setShowResults] = useState<boolean>(false);
@@ -164,6 +155,9 @@ const ResultsReset = styled(CardWrapper)`
   align-items: center;
   justify-content: space-between;
   min-height: 550px;
+  @media screen and (max-width: 500px) {
+    min-height: 300px;
+  }
 
   img {
     position: initial;

@@ -1,4 +1,6 @@
-export const computeQuestions = (data: [{name:string, flag: string, capital: string}], NUMBER_OF_QUESTIONS: number) => {
+import {Country} from './interfaces'
+
+export const computeQuestions = (data: Country[], NUMBER_OF_QUESTIONS: number) => {
     const options = ['capitals','flags'];
     const selectedOption = pickRandom(options);
 
@@ -28,11 +30,17 @@ export const computeQuestions = (data: [{name:string, flag: string, capital: str
 }
 }
 
-const pickRandom = (data: any) => {
+/* *************
+HELPER FUNCTIONS
+************* */
+
+// randomly pick an item from given array {data}
+const pickRandom = (data: any[]) => {
     return data[Math.floor(Math.random() * data.length)];
 }
 
-const select = (data: any, count: number, subject: string) => {
+// randomly pick {count} number of items from {data} and store their {subject} value
+const select = (data: any[], count: number, subject: string) => {
     let selection=[];
     for (let i=0;i<count;i++) {
         !!subject ? selection.push(pickRandom(data)[subject])
@@ -41,16 +49,18 @@ const select = (data: any, count: number, subject: string) => {
     return selection;
 }
 
-const hasDuplicates = (arr: any) => {
-    return arr.filter((item:any, index:number) => arr.indexOf(item) !== index).length > 0;
+// check for duplicates in array
+const hasDuplicates = (arr: any[]) => {
+    return arr.filter((item:string, index:number) => arr.indexOf(item) !== index).length > 0;
 }
 
-// array shuffle from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
-function shuffleArray(array: any) {
-    let newArr = array;
-    for (let i = newArr.length - 1; i > 0; i--) {
+// shuffle an array
+// based on https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+function shuffleArray(array: any[]) {
+    let tempArr = array;
+    for (let i = tempArr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+        [tempArr[i], tempArr[j]] = [tempArr[j], tempArr[i]];
     }
-    return newArr;
+    return tempArr;
 }

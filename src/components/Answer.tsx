@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 
 interface AnswerProps {
@@ -6,12 +5,11 @@ interface AnswerProps {
     text: string,
     onClick: (e:any) => boolean | void;
     disabled: boolean,
-    correctAnswer:string,
-    chosenAnswer:null|string,
+    correctAnswer: string,
+    chosenAnswer: null|string,
 }
 
 export default function Answer({letterIndex, text, onClick, disabled, correctAnswer, chosenAnswer}:AnswerProps) {
-    const states = [null, false, true];
 
     const handleClick = (e:any) => {
         return !disabled && onClick(e);
@@ -36,7 +34,7 @@ export default function Answer({letterIndex, text, onClick, disabled, correctAns
     )
 }
 
-const AnswerButton = styled.button<{answerStatus: null | false | true}>`
+const AnswerButton = styled.button<{answerStatus: null | boolean}>`
     display: flex;
     color: var(--purple);
     padding: 15px;

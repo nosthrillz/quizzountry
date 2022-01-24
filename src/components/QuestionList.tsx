@@ -1,17 +1,10 @@
 import { useState } from "react";
 import styled from "styled-components";
 import Answer from "./Answer"
-import {questions} from '../App'
-
-// interface questions {
-//     text: string,
-//     correctAnswer: string,
-//     allAnswers: string[],
-//     flag: string
-//   }
+import {Question} from '../features/interfaces'
 
 interface QuestionListProps {
-    data: any,
+    data: Question,
     type: string,
     onNext: () => void,
     show: boolean,
@@ -31,7 +24,7 @@ export default function QuestionList({data, type, onNext, show, onCorrectAnswer,
     else return (
         <Wrapper>
             {type==="flags" && <Flag>{data.flag}</Flag>}
-            <Question>{currentStep+1}. {data.text}</Question>
+            <QuestionText>{currentStep+1}. {data.text}</QuestionText>
             <Answers>
             {data.allAnswers.map((answer:string, idx:number) =>(
                 <Answer
@@ -70,7 +63,7 @@ const Flag = styled.p`
 `;
 
 
-const Question = styled.h2`
+const QuestionText = styled.h2`
     font-size: 24px;
     font-weight: 700;
     line-height: 36px;
